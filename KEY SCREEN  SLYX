@@ -77,10 +77,14 @@ end
 local function checkKey()
     local enteredKey = keyBox.Text:lower()
     if enteredKey == correctKey:lower() then
-        -- Şifre doğru girildiyse loadstring'i çalıştır
+        -- Şifre doğru girildiyse önce loadstring'i çalıştır
         loadstring(game:HttpGet("https://raw.githubusercontent.com/veissss/SLYX-HUB/refs/heads/main/SLYX%20LUA"))()
-        ScreenGui:Destroy()  -- GUI'yi kapat
-        playSound("8747340426") -- Başarılı giriş sesi
+
+        -- Sonrasında GUI'yi kapat
+        ScreenGui:Destroy()
+
+        -- Başarılı giriş sesi
+        playSound("8747340426")
     else
         attemptCount = attemptCount + 1
         createNotification("Wrong key. Attempt " .. attemptCount .. "/3", "1548304764") -- Yanlış giriş sesi
