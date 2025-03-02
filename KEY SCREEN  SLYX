@@ -78,7 +78,7 @@ local function checkKey()
     local enteredKey = keyBox.Text:lower()
     if enteredKey == correctKey:lower() then
         -- Şifre doğru girildiyse loadstring'i çalıştır
-     loadstring(game:HttpGet("https://raw.githubusercontent.com/veissss/SLYX-HUB/refs/heads/main/SLYX%20LUA"))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/veissss/SLYX-HUB/refs/heads/main/SLYX%20LUA"))()
         ScreenGui:Destroy()  -- GUI'yi kapat
         playSound("8747340426") -- Başarılı giriş sesi
     else
@@ -88,6 +88,7 @@ local function checkKey()
         if attemptCount >= 3 then
             -- 3 yanlış denemeden sonra GUI'yi kapat
             ScreenGui:Destroy()
+            playSound("1548304764") -- Kapanış sesi
         end
     end
 end
