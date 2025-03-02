@@ -1,0 +1,109 @@
+local CoreGui = game:GetService("CoreGui")
+local Players = game:GetService("Players")
+local soundService = game:GetService("SoundService")
+
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "Veiss SS"
+ScreenGui.Parent = CoreGui
+
+local Frame = Instance.new("Frame")
+Frame.Size = UDim2.new(0, 450, 0, 200)
+Frame.Position = UDim2.new(0.5, -225, 0.5, -100)
+Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+Frame.BorderSizePixel = 0
+Frame.Parent = ScreenGui
+Frame.BackgroundTransparency = 0.3
+
+local UICorner = Instance.new("UICorner")
+UICorner.CornerRadius = UDim.new(0, 20)
+UICorner.Parent = Frame
+
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Size = UDim2.new(0, 450, 0, 50)
+titleLabel.Text = "Enter Key"
+titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleLabel.TextScaled = true
+titleLabel.BackgroundTransparency = 1
+titleLabel.Font = Enum.Font.SourceSansBold
+titleLabel.Parent = Frame
+
+local keyBox = Instance.new("TextBox")
+keyBox.Size = UDim2.new(0, 420, 0, 40)
+keyBox.Position = UDim2.new(0, 15, 0, 60)
+keyBox.PlaceholderText = "Enter Key"
+keyBox.ClearTextOnFocus = true
+keyBox.Text = ""
+keyBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+keyBox.TextScaled = true
+keyBox.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+keyBox.Parent = Frame
+
+local attemptCount = 0
+local correctKey = "slyx"
+
+local function playSound(soundId)
+    local sound = Instance.new("Sound")
+    sound.SoundId = "rbxassetid://" .. soundId
+    sound.Parent = soundService
+    sound:Play()
+
+    -- Ses bittiğinde sil
+    sound.Ended:Connect(function()
+        sound:Destroy()
+    end)
+end
+
+local function createNotification(message, soundId)
+    local notification = Instance.new("TextLabel")
+    notification.Size = UDim2.new(0, 300, 0, 50)
+    notification.Position = UDim2.new(0.5, -150, 0, 120)
+    notification.Text = message
+    notification.TextColor3 = Color3.fromRGB(255, 255, 255)
+    notification.TextScaled = true
+    notification.BackgroundColor3 = Color3.fromRGB(0, 128, 0)
+    notification.Font = Enum.Font.SourceSansBold
+    notification.Parent = ScreenGui
+
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 10)
+    corner.Parent = notification
+
+    playSound(soundId)
+
+    task.wait(3)
+    notification:Destroy()
+end
+
+local function checkKey()
+    local enteredKey = keyBox.Text:lower()
+    if enteredKey == correctKey:lower() then
+        -- Şifre doğru girildiyse loadstring'i çalıştır
+        loadstring(game:HttpGet('https://pastebin.com/raw/JhAdUR01', true))()
+        ScreenGui:Destroy()  -- GUI'yi kapat
+        playSound("8747340426") -- Başarılı giriş sesi
+    else
+        attemptCount = attemptCount + 1
+        createNotification("Wrong key. Attempt " .. attemptCount .. "/3", "1548304764") -- Yanlış giriş sesi
+
+        if attemptCount >= 3 then
+            -- 3 yanlış denemeden sonra GUI'yi kapat
+            ScreenGui:Destroy()
+        end
+    end
+end
+
+local submitButton = Instance.new("TextButton")
+submitButton.Size = UDim2.new(0, 420, 0, 40)
+submitButton.Position = UDim2.new(0, 15, 0, 120)
+submitButton.Text = "Submit"
+submitButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+submitButton.BackgroundColor3 = Color3.fromRGB(50, 180, 50)
+submitButton.Font = Enum.Font.SourceSansBold
+submitButton.TextScaled = true
+submitButton.Parent = Frame
+
+local buttonCorner = Instance.new("UICorner")
+buttonCorner.CornerRadius = UDim.new(0, 15)
+buttonCorner.Parent = submitButton
+
+submitButton.MouseButton1Click:Connect(checkKey)
